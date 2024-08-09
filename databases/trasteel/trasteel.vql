@@ -1,0 +1,5 @@
+﻿CREATE OR REPLACE DATABASE trasteel '';
+
+ALTER DATABASE trasteel
+  CHARSET DEFAULT;
+

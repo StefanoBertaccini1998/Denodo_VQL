@@ -1,0 +1,55 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_retaildeliverymodestaging
+    FOLDER = '/1 - connectivity/2 - baseview'
+    DATASOURCENAME=ds_trading
+    CATALOGNAME='${databases.trasteel.folder.1 - connectivity.folder.2 - baseview.views.jdbc.bv_retaildeliverymodestaging.CATALOGNAME}' 
+    SCHEMANAME='${databases.trasteel.folder.1 - connectivity.folder.2 - baseview.views.jdbc.bv_retaildeliverymodestaging.SCHEMANAME}' 
+    RELATIONNAME='RETAILDELIVERYMODESTAGING' 
+    OUTPUTSCHEMA (
+        definitiongroup = 'DEFINITIONGROUP' :'java.lang.String' (OPT) (sourcetypesize='60', sourcetypeid='-9', sourcetypename='nvarchar')  NOT NULL SORTABLE,
+        executionid = 'EXECUTIONID' :'java.lang.String' (OPT) (sourcetypesize='90', sourcetypeid='-9', sourcetypename='nvarchar')  NOT NULL SORTABLE,
+        isselected = 'ISSELECTED' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        transferstatus = 'TRANSFERSTATUS' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        deliverymodename = 'DELIVERYMODENAME' :'java.lang.String' (OPT) (sourcetypesize='10', sourcetypeid='-9', sourcetypename='nvarchar')  NOT NULL SORTABLE,
+        deliverymodeid = 'DELIVERYMODEID' :'java.lang.String' (OPT) (sourcetypesize='10', sourcetypeid='-9', sourcetypename='nvarchar')  NOT NULL SORTABLE,
+        partition = 'PARTITION' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='19', sourcetypeid='-5', sourcetypename='bigint')  ESCAPE NOT NULL SORTABLE,
+        recid = 'RECID' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='19', sourcetypeid='-5', sourcetypename='bigint')  NOT NULL SORTABLE,
+        recversion = 'RECVERSION' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'I_18579STAGINGIDX' PRIMARY KEY ( 'PARTITION' , 'DEFINITIONGROUP' , 'EXECUTIONID' , 'DELIVERYMODEID' )
+    INDEX 'I_18579RECID' CLUSTER UNIQUE ( 'RECID' )
+    INDEX 'I_18579STAGINGIDX' OTHER UNIQUE PRIMARY ( 'PARTITION' , 'DEFINITIONGROUP' , 'EXECUTIONID' , 'DELIVERYMODEID' );
+
+CREATE OR REPLACE TABLE bv_retaildeliverymodestaging I18N us_pst (
+        definitiongroup:text (notnull, sourcetypeid = '-9', sourcetypesize = '60'),
+        executionid:text (notnull, sourcetypeid = '-9', sourcetypesize = '90'),
+        isselected:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        transferstatus:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        deliverymodename:text (notnull, sourcetypeid = '-9', sourcetypesize = '10'),
+        deliverymodeid:text (notnull, sourcetypeid = '-9', sourcetypesize = '10'),
+        partition:long (notnull, sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '19'),
+        recid:long (notnull, sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '19'),
+        recversion:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10')
+    )
+    FOLDER = '/1 - connectivity/2 - baseview'
+    CONSTRAINT 'I_18579STAGINGIDX' PRIMARY KEY ( 'partition' , 'definitiongroup' , 'executionid' , 'deliverymodeid' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_retaildeliverymodestaging(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD definitiongroup (any) OPT ANY
+             ADD executionid (any) OPT ANY
+             ADD isselected (any) OPT ANY
+             ADD transferstatus (any) OPT ANY
+             ADD deliverymodename (any) OPT ANY
+             ADD deliverymodeid (any) OPT ANY
+             ADD partition (any) OPT ANY
+             ADD recid (any) OPT ANY
+             ADD recversion (any) OPT ANY
+        )
+        OUTPUTLIST (definitiongroup, deliverymodeid, deliverymodename, executionid, isselected, partition, recid, recversion, transferstatus
+        )
+        WRAPPER (jdbc bv_retaildeliverymodestaging)
+    );
+
